@@ -101,6 +101,13 @@
   .flashcard h2{margin-top:0;font-size:18px}
   .flashcard .answer{margin-top:8px;font-size:16px}
   .flashcard .quote{margin-top:12px;font-size:12px;color:var(--muted)}
+  .card-counter-on-card {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: var(--muted);
+  }
   .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   button.btn{
     background:transparent;border:1px solid rgba(255,255,255,0.2);
@@ -141,9 +148,11 @@
       <div class="flashcard" id="flashcard">
         <div class="flashcard-inner">
           <div class="flashcard-front">
+            <div class="card-counter-on-card"></div>
             <h2 id="cardQ">Pytanie</h2>
           </div>
           <div class="flashcard-back">
+            <div class="card-counter-on-card"></div>
             <h2 id="cardA" class="answer"></h2>
             <div id="cardQuote" class="quote"></div>
           </div>
@@ -152,7 +161,6 @@
       <div class="controls" style="align-items:center;">
         <button class="btn" id="prevCard">← Poprzednia</button>
         <button class="btn" id="flipCard">Obróć</button>
-        <div id="cardCounter" class="sub" style="flex-grow:1;text-align:center;"></div>
         <button class="btn" id="nextCard">Następna →</button>
       </div>
       <div class="instruction-text">aby odwrócić fiszkę kliknij na nią</div>
@@ -180,7 +188,6 @@ let cardIndex=0;
 const cardQ = document.getElementById('cardQ');
 const cardA = document.getElementById('cardA');
 const cardQuote = document.getElementById('cardQuote');
-const cardCounter = document.getElementById('cardCounter');
 
 function renderDecks(){
   const dl=document.getElementById('deckList');
@@ -211,7 +218,8 @@ function renderCard(){
     cardQ.textContent = c.question;
     cardA.textContent = c.answer;
     cardQuote.textContent = `Cytat: ${c.quote}`;
-    cardCounter.textContent = `${(cardIndex % activeDeck.cards.length) + 1} / ${activeDeck.cards.length}`;
+    const counterText = `${(cardIndex % activeDeck.cards.length) + 1} / ${activeDeck.cards.length}`;
+    document.querySelectorAll('.card-counter-on-card').forEach(c => c.textContent = counterText);
   }, 150); // Delay should be less than half of the transition time
 }
 document.getElementById('prevCard').onclick=()=>{cardIndex=(cardIndex-1+activeDeck.cards.length)%activeDeck.cards.length;renderCard();}
